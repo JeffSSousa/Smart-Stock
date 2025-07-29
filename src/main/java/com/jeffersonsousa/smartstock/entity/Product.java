@@ -2,6 +2,8 @@ package com.jeffersonsousa.smartstock.entity;
 
 import java.util.List;
 
+import com.jeffersonsousa.smartstock.dto.ProductRequestDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long productId;
@@ -30,12 +32,20 @@ public class Product {
 	private Integer currentQuantity;
 	private Integer minimumQuantity;
 	private Double price;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
-	
+
 	@OneToMany(mappedBy = "product")
 	private List<StockMovement> stockMovements;
-	
+
+	public Product(ProductRequestDTO dto, Category category) {
+		this.name = dto.name();
+		this.currentQuantity = 0;
+		this.minimumQuantity = dto.minimumQuantity();
+		this.price = dto.price();
+		this.category = category;
+	}
+
 }
