@@ -2,6 +2,8 @@ package com.jeffersonsousa.smartstock.entity;
 
 import java.util.List;
 
+import com.jeffersonsousa.smartstock.dto.CategoryRequestDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,5 +30,11 @@ public class Category {
 	
 	@OneToMany(mappedBy = "category")
 	private List<Product> products;
+
+	public Category(CategoryRequestDTO category) {
+		this.name = category.name();
+	}
+	
+	
 
 }
