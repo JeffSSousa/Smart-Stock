@@ -36,7 +36,10 @@ public class Product {
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
-
+	
+	@OneToMany(mappedBy = "product")
+	private List<Location> locations;
+	
 	@OneToMany(mappedBy = "product")
 	private List<StockMovement> stockMovements;
 
