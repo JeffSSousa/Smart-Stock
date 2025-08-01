@@ -44,6 +44,12 @@ public class ProductController {
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@GetMapping(value = "/lowStockProducts")
+	public ResponseEntity<List<ProductResponseDTO>> getLowStockProducts(){
+		List<ProductResponseDTO> list = service.getLowStockProducts();
+		return ResponseEntity.ok().body(list);
+	}
+	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @RequestBody ProductUpdateDTO dto){
 		return ResponseEntity.ok().body(service.update(id,dto));

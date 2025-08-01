@@ -41,6 +41,11 @@ public class ProductService {
 		List<ProductResponseDTO> list = productRepository.findAll().stream().map(ProductResponseDTO::new).toList();
 		return list;
 	}
+	
+	public List<ProductResponseDTO> getLowStockProducts() {
+		List<ProductResponseDTO> list = productRepository.findAll().stream().filter(p -> p.getCurrentQuantity() < p.getMinimumQuantity()).map(ProductResponseDTO::new).toList();
+		return list;
+	}
 
 
 	public ProductResponseDTO update(Long id, ProductUpdateDTO dto) {
