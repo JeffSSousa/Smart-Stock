@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
 import com.jeffersonsousa.smartstock.exception.InsufficientStockException;
 import com.jeffersonsousa.smartstock.exception.StockException;
 
@@ -27,6 +28,14 @@ public class RestExceptionHandler {
 	public ResponseEntity<StandardError> insufficientStock(InsufficientStockException e, HttpServletRequest request){
 		String error = "Saída Negada!!";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(ControllerNotFoundException.class)
+	public ResponseEntity<StandardError> controllerNotFound(ControllerNotFoundException e, HttpServletRequest request){
+		String error = "Não Encontrado!!";
+		HttpStatus status = HttpStatus.NOT_FOUND;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}

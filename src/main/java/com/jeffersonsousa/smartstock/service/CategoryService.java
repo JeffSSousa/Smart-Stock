@@ -1,7 +1,6 @@
 package com.jeffersonsousa.smartstock.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.jeffersonsousa.smartstock.dto.CategoryRequestDTO;
 import com.jeffersonsousa.smartstock.dto.CategoryResponseDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
+import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
 import com.jeffersonsousa.smartstock.repository.CategoryRepository;
 
 @Service
@@ -23,8 +23,10 @@ public class CategoryService {
 	}
 
 	public CategoryResponseDTO findById(Long id) {
-		Optional<Category> category = categoryRepository.findById(id);
-		return new CategoryResponseDTO(category.get());
+		Category category = categoryRepository.findById(id)
+				.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + id));
+		
+		return new CategoryResponseDTO(category);
 	}
 
 	public List<CategoryResponseDTO> getAllCategories() {
@@ -33,13 +35,19 @@ public class CategoryService {
 	}
 
 	public CategoryResponseDTO update(Long id, CategoryRequestDTO dto) {
-		Category entity = categoryRepository.getReferenceById(id);
+		Category entity = categoryRepository.findById(id)
+				.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + id));
+		
 		entity.setName(dto.name());
 		categoryRepository.save(entity);
+		
 		return new CategoryResponseDTO(entity);
 	}
 
 	public void delete(Long id) {
-		categoryRepository.deleteById(id);
+		Category category = categoryRepository.findById(id)
+				.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + id));
+		
+		categoryRepository.delete(category);
 	}
 }
