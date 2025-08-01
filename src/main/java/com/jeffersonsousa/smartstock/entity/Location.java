@@ -23,9 +23,9 @@ public class Location {
 
 	@Id
 	private String locationId;
-	private String aisle;
-	private String position;
-	private String floor;
+	private char aisle;
+	private Integer position;
+	private Integer floor;
 	private Boolean hasProduct;
 
 	@ManyToOne
