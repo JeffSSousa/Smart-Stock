@@ -24,4 +24,11 @@ public class StockMovementController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
+	@PostMapping(value = "/output")
+	public ResponseEntity<Void> productOutput(@RequestBody MovementRequestDTO dto){
+		service.Output(dto);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+	
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.jeffersonsousa.smartstock.exception.InsufficientStockException;
 import com.jeffersonsousa.smartstock.exception.StockException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +20,14 @@ public class RestExceptionHandler {
 		String error = "Regra de estoque violada !!!";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
-		return ResponseEntity.status(status).body(err);
+		return ResponseEntity.status(status).body(err);		
+	}
 	
+	@ExceptionHandler(InsufficientStockException.class)
+	public ResponseEntity<StandardError> insufficientStock(InsufficientStockException e, HttpServletRequest request){
+		String error = "Saída Negada!!";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
 	}
 }
