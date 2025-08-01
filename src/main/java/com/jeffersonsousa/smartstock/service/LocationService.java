@@ -10,6 +10,7 @@ import com.jeffersonsousa.smartstock.dto.CreateStockDTO;
 import com.jeffersonsousa.smartstock.dto.LocationResponseDTO;
 import com.jeffersonsousa.smartstock.dto.StockCreationMessageDTO;
 import com.jeffersonsousa.smartstock.entity.Location;
+import com.jeffersonsousa.smartstock.exception.StockException;
 import com.jeffersonsousa.smartstock.repository.LocationRepository;
 
 @Service
@@ -26,7 +27,7 @@ public class LocationService {
 	public StockCreationMessageDTO createStock(CreateStockDTO dto) {
 		
 		if(!locationRepository.findAll().isEmpty()) {
-			System.out.println("Estoque já foi criado");
+			throw new StockException("Estoque já foi criado!");
 		}
 		
 		List<Location> stock = new ArrayList<>();
