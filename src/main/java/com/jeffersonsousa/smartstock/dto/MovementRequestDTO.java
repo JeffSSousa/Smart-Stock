@@ -1,6 +1,6 @@
 package com.jeffersonsousa.smartstock.dto;
 
-public record ProductInputRequestDTO (Integer quantity,
+public record MovementRequestDTO (Integer quantity,
 									  Long productId){
 
 }

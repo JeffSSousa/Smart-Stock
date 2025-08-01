@@ -2,7 +2,7 @@ package com.jeffersonsousa.smartstock.entity;
 
 import java.time.Instant;
 
-import com.jeffersonsousa.smartstock.dto.ProductInputRequestDTO;
+import com.jeffersonsousa.smartstock.dto.MovementRequestDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,7 +40,7 @@ public class StockMovement {
 	@JoinColumn(name = "location_id")
 	private Location location;
 	
-	public StockMovement(ProductInputRequestDTO dto) {
+	public StockMovement(MovementRequestDTO dto) {
 		this.quantity = dto.quantity();
 		this.movimentationDate = Instant.now();
 	}

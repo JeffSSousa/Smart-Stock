@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jeffersonsousa.smartstock.dto.ProductInputRequestDTO;
+import com.jeffersonsousa.smartstock.dto.MovementRequestDTO;
 import com.jeffersonsousa.smartstock.entity.Location;
 import com.jeffersonsousa.smartstock.entity.Product;
 import com.jeffersonsousa.smartstock.entity.StockMovement;
@@ -25,7 +25,7 @@ public class StockMovementService {
 	@Autowired
 	private StockMovementRepository movementRepository;
 	
-	public void Input(ProductInputRequestDTO dto) {
+	public void Input(MovementRequestDTO dto) {
 		
 		Product product = productRepository.getReferenceById(dto.productId());
 		
