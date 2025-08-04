@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.jeffersonsousa.smartstock.dto.ProductRequestDTO;
@@ -12,6 +13,7 @@ import com.jeffersonsousa.smartstock.dto.ProductUpdateDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
 import com.jeffersonsousa.smartstock.entity.Product;
 import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
+import com.jeffersonsousa.smartstock.exception.DatabaseException;
 import com.jeffersonsousa.smartstock.repository.CategoryRepository;
 import com.jeffersonsousa.smartstock.repository.ProductRepository;
 
@@ -68,10 +70,16 @@ public class ProductService {
 
 
 	public void delete(Long id) {
+		
+		try {
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new ControllerNotFoundException("Produto com o ID" + id + " não foi encontrado!!"));
 		
 		productRepository.delete(product);
+		
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Não é possível excluir o produto. Ele está vinculado a outras entidades no sistema.");
+		}
 	}
 
 }

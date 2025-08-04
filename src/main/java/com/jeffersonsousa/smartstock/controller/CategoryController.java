@@ -74,8 +74,8 @@ public class CategoryController {
 	@Operation(description = "Deleta uma categoria pelo Id.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "Retorna que a categoria foi deletada."),
-			@ApiResponse(responseCode = "404", description = "Não encontrou a categoria.")
-			// não foi possivel excluir uma categoria com produtos vinculados
+			@ApiResponse(responseCode = "404", description = "Não encontrou a categoria."),
+			@ApiResponse(responseCode = "409", description = "Violação de integridade.")
 	})
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteCategory(@PathVariable Long id){

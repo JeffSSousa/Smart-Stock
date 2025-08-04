@@ -85,8 +85,8 @@ public class ProductController {
 	@Operation(description = "Deleta o produto pelo Id.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "Deleta o produto."),
-			@ApiResponse(responseCode = "404", description = "Não encontrou o produto.")
-			//não pode deletar um produto vinculado com um endereço ou com historicos de movimentação
+			@ApiResponse(responseCode = "404", description = "Não encontrou o produto."),
+			@ApiResponse(responseCode = "409", description = "Violação de integridade.")
 	})
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){

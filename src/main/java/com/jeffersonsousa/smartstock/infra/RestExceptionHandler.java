@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
+import com.jeffersonsousa.smartstock.exception.DatabaseException;
 import com.jeffersonsousa.smartstock.exception.InsufficientStockException;
 import com.jeffersonsousa.smartstock.exception.StockException;
 
@@ -36,6 +37,14 @@ public class RestExceptionHandler {
 	public ResponseEntity<StandardError> controllerNotFound(ControllerNotFoundException e, HttpServletRequest request){
 		String error = "Não Encontrado!!";
 		HttpStatus status = HttpStatus.NOT_FOUND;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(DatabaseException.class)
+	public ResponseEntity<StandardError> databaseException(DatabaseException e, HttpServletRequest request){
+		String error = "Erro no banco de dados";
+		HttpStatus status = HttpStatus.CONFLICT;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}

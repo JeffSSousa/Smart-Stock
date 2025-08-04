@@ -3,12 +3,14 @@ package com.jeffersonsousa.smartstock.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.jeffersonsousa.smartstock.dto.CategoryRequestDTO;
 import com.jeffersonsousa.smartstock.dto.CategoryResponseDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
 import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
+import com.jeffersonsousa.smartstock.exception.DatabaseException;
 import com.jeffersonsousa.smartstock.repository.CategoryRepository;
 
 @Service
@@ -45,9 +47,15 @@ public class CategoryService {
 	}
 
 	public void delete(Long id) {
+		
+		try {
 		Category category = categoryRepository.findById(id)
 				.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + id));
 		
 		categoryRepository.delete(category);
+		
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Não é possível excluir a categoria. Ele está vinculado a outras entidades no sistema.");
+		}
 	}
 }
