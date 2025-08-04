@@ -18,6 +18,10 @@ import com.jeffersonsousa.smartstock.dto.CategoryRequestDTO;
 import com.jeffersonsousa.smartstock.dto.CategoryResponseDTO;
 import com.jeffersonsousa.smartstock.service.CategoryService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("category")
 public class CategoryController {
@@ -25,29 +29,54 @@ public class CategoryController {
 	@Autowired
 	private CategoryService service;
 	
+	@Operation(description = "Cria uma categoria de produtos.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Cria a categoria")
+	})
 	@PostMapping
 	public ResponseEntity<Void> insertCategory(@RequestBody CategoryRequestDTO dto){
 		service.createCategory(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	@Operation(description = "Busca categoria pelo Id.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Retorna a categoria pelo Id."),
+			@ApiResponse(responseCode = "404", description = "Não encontrou a categoria.")
+	})
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable Long id){
 		CategoryResponseDTO category = service.findById(id);
 		return ResponseEntity.ok().body(category);
 	}
 	
+	@Operation(description = "Busca todas as categorias.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Retorna todas as categorias."),
+	})
 	@GetMapping
 	public ResponseEntity<List<CategoryResponseDTO>> getCategories(){
 		List<CategoryResponseDTO> list = service.getAllCategories();
 		return ResponseEntity.ok().body(list);
 	}
 	
+	
+	@Operation(description = "Edita a categoria pelo Id.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Retorna a categoria editada."),
+			@ApiResponse(responseCode = "404", description = "Não encontrou a categoria.")
+	})
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryRequestDTO dto){
 		return ResponseEntity.ok().body(service.update(id, dto));
 	}
 	
+	@Operation(description = "Deleta uma categoria pelo Id.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "204", description = "Retorna que a categoria foi deletada."),
+			@ApiResponse(responseCode = "404", description = "Não encontrou a categoria.")
+			// não foi possivel excluir uma categoria com produtos vinculados
+	})
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteCategory(@PathVariable Long id){
 		service.delete(id);

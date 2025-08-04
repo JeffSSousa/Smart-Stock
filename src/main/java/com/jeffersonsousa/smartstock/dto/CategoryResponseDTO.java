@@ -2,7 +2,16 @@ package com.jeffersonsousa.smartstock.dto;
 
 import com.jeffersonsousa.smartstock.entity.Category;
 
-public record CategoryResponseDTO(Long id, String name) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record CategoryResponseDTO(
+		
+		
+		@Schema(description = "Identificador unico localizar a categoria", example = "2")
+		Long id, 
+		
+		@Schema(description = "Descrição da categoria", example = "Eletronicos")
+		String name) {
 
 	public CategoryResponseDTO(Category category) {
 		this(category.getCategoryId(), category.getName());

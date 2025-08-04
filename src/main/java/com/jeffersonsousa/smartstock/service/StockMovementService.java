@@ -30,7 +30,9 @@ public class StockMovementService {
 	private StockMovementRepository movementRepository;
 
 	public void Input(MovementRequestDTO dto) {
-
+		
+		//não fazer entrada de produtos com valores menores que zero
+		
 		Product product = productRepository.findById(dto.productId())
 				.orElseThrow(() -> new ControllerNotFoundException("Produto com o ID " + dto.productId() + " não foi encontrado!!"));
 
