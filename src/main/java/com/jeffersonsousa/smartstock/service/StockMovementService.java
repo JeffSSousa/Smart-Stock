@@ -2,7 +2,6 @@ package com.jeffersonsousa.smartstock.service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,7 @@ import com.jeffersonsousa.smartstock.dto.MovementRequestDTO;
 import com.jeffersonsousa.smartstock.entity.Location;
 import com.jeffersonsousa.smartstock.entity.Product;
 import com.jeffersonsousa.smartstock.entity.StockMovement;
+import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
 import com.jeffersonsousa.smartstock.exception.InsufficientStockException;
 import com.jeffersonsousa.smartstock.exception.StockException;
 import com.jeffersonsousa.smartstock.repository.LocationRepository;
@@ -31,20 +31,22 @@ public class StockMovementService {
 
 	public void Input(MovementRequestDTO dto) {
 
-		Product product = productRepository.getReferenceById(dto.productId());
+		Product product = productRepository.findById(dto.productId())
+				.orElseThrow(() -> new ControllerNotFoundException("Produto com o ID " + dto.productId() + " não foi encontrado!!"));
 
-		Optional<Location> location = locationRepository.findFirstByHasProductFalse();
+		Location location = locationRepository.findFirstByHasProductFalse()
+				.orElseThrow(() -> new  ControllerNotFoundException("Não foi encontrado Endereço livre!!"));
 
-		location.get().setProduct(product);
-		location.get().setQuantity(dto.quantity());
-		location.get().setHasProduct(true);
+		location.setProduct(product);
+		location.setQuantity(dto.quantity());
+		location.setHasProduct(true);
 
 		StockMovement newInput = new StockMovement(dto);
 		newInput.setType("Entrada");
-		newInput.setLocation(location.get());
+		newInput.setLocation(location);
 		newInput.setProduct(product);
 
-		locationRepository.save(location.get());
+		locationRepository.save(location);
 		movementRepository.save(newInput);
 
 		updateCurrentQuantity(product);
@@ -52,7 +54,8 @@ public class StockMovementService {
 
 	public void Output(MovementRequestDTO dto) {
 
-		Product product = productRepository.getReferenceById(dto.productId());
+		Product product = productRepository.findById(dto.productId())
+				.orElseThrow(() -> new ControllerNotFoundException("Produto com o ID " + dto.productId() + " não foi encontrado!!"));
 
 		if (dto.quantity() > product.getCurrentQuantity()) {
 			throw new InsufficientStockException("Saldo Insuficiente no Estoque!!");

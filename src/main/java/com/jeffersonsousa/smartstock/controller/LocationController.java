@@ -28,15 +28,12 @@ public class LocationController {
 		List<LocationResponseDTO> list = service.getAllLocations();
 		return ResponseEntity.ok().body(list);
 	}
-	
-	//criação de Estoque
+
 	
 	@PostMapping
 	public ResponseEntity<StockCreationMessageDTO> createStock(@RequestBody CreateStockDTO dto){
 		var creation = service.createStock(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(creation);
 	}
-	//get ALL and byId
-	//delete all
 	
 }

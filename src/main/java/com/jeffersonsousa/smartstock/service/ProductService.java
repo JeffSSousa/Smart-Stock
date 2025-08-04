@@ -11,6 +11,7 @@ import com.jeffersonsousa.smartstock.dto.ProductResponseDTO;
 import com.jeffersonsousa.smartstock.dto.ProductUpdateDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
 import com.jeffersonsousa.smartstock.entity.Product;
+import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
 import com.jeffersonsousa.smartstock.repository.CategoryRepository;
 import com.jeffersonsousa.smartstock.repository.ProductRepository;
 
@@ -32,8 +33,10 @@ public class ProductService {
 
 
 	public ProductResponseDTO getProductById(Long id) {
-		Optional<Product> product = productRepository.findById(id);
-		return new ProductResponseDTO(product.get());
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new ControllerNotFoundException("Produto com o ID" + id + " não foi encontrado!!"));
+		
+		return new ProductResponseDTO(product);
 	}
 
 	
@@ -49,7 +52,9 @@ public class ProductService {
 
 
 	public ProductResponseDTO update(Long id, ProductUpdateDTO dto) {
-		Product update = productRepository.getReferenceById(id);
+		Product update = productRepository.findById(id)
+				.orElseThrow(() -> new ControllerNotFoundException("Produto com o ID" + id + " não foi encontrado!!"));
+		
 		updateDate(update, dto);
 		productRepository.save(update);
 		return new ProductResponseDTO(update);
@@ -63,7 +68,10 @@ public class ProductService {
 
 
 	public void delete(Long id) {
-		productRepository.deleteById(id);
+		Product product = productRepository.findById(id)
+				.orElseThrow(() -> new ControllerNotFoundException("Produto com o ID" + id + " não foi encontrado!!"));
+		
+		productRepository.delete(product);
 	}
 
 }
