@@ -25,8 +25,8 @@ public class StockMovementController {
 	@Operation(description = "Realiza a entrada de produtos no estoque e cria historico da movimentação.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Realiza a entrada dos produtos e cria movimentação de estoque."),
-			@ApiResponse(responseCode = "404", description = "Não encontrou o produto ou endereço livre.")
-			// não fazer entrada de produtos com valores menores que zero
+			@ApiResponse(responseCode = "404", description = "Não encontrou o produto ou endereço livre."),
+			@ApiResponse(responseCode = "400", description = "Regra de Estoque violada.")
 	})
 	@PostMapping(value = "/input")
 	public ResponseEntity<Void> productInput(@RequestBody MovementRequestDTO dto){

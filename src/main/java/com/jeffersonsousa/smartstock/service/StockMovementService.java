@@ -31,7 +31,9 @@ public class StockMovementService {
 
 	public void Input(MovementRequestDTO dto) {
 		
-		//não fazer entrada de produtos com valores menores que zero
+		if(dto.quantity() <= 0) {
+			throw new StockException("A quantidade de entrada deve ser maior que zero!!");
+		}
 		
 		Product product = productRepository.findById(dto.productId())
 				.orElseThrow(() -> new ControllerNotFoundException("Produto com o ID " + dto.productId() + " não foi encontrado!!"));
