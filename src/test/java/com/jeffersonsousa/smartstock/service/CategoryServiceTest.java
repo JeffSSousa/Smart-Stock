@@ -1,10 +1,14 @@
 package com.jeffersonsousa.smartstock.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,7 +21,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.jeffersonsousa.smartstock.dto.CategoryRequestDTO;
+import com.jeffersonsousa.smartstock.dto.CategoryResponseDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
+import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
 import com.jeffersonsousa.smartstock.repository.CategoryRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,5 +61,38 @@ public class CategoryServiceTest {
 		}	
 	}
 	
-	
+	@Nested
+	class findById{
+		
+		@Test
+		@DisplayName("Deve procurar uma categoria pelo ID")
+		void shouldFindACategoryById() {
+			
+			Long id = 1L;
+			String name = "Computer";
+			Category category = new Category(id, name, null);
+			
+			when(repository.findById(id)).thenReturn(Optional.of(category));
+			
+			CategoryResponseDTO output = service.findById(id);
+			
+			assertNotNull(output);
+			assertEquals(id, output.id());
+			assertEquals(name, output.name());
+		}
+		
+		@Test
+		@DisplayName("Deve lançar uma exceção quando a categoria não for encontrada")
+		void shouldThrowExceptionWhenCategoryNotFound() {
+			
+			Long id = 1L;
+			when(repository.findById(id)).thenReturn(Optional.empty());
+			
+			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.findById(id));
+			assertEquals("Não foi encontrada uma categoria com o ID: " + id, e.getMessage());
+			
+			verify(repository, times(1)).findById(id);
+		}
+		
+	}
 }
