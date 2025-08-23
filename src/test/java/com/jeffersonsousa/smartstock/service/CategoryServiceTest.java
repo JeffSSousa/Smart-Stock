@@ -172,4 +172,39 @@ public class CategoryServiceTest {
 			assertEquals("Não é possível excluir a categoria. Ele está vinculado a outras entidades no sistema.", e.getMessage());
 		}
 	}
+	
+	@Nested
+	class update{
+		
+		
+		@Test
+		@DisplayName("Deve atualizar dados da categoria com sucesso")
+		void shouldUpdateACategory(){
+			
+			Long id = 1L;
+			Category category = new Category(id, "Computers", null);
+			CategoryRequestDTO dto = new CategoryRequestDTO("Computer");
+			when(repository.findById(id)).thenReturn(Optional.of(category));
+			
+			CategoryResponseDTO output = service.update(id, dto);
+			
+			verify(repository, times(1)).save(category);
+			assertEquals(dto.name(), output.name());
+		}
+		
+		@Test
+		@DisplayName("Deve lançar uma exceção quando a categoria não for encontrada")
+		void shouldThrowExceptionWhenCategoryNotFound() {
+			
+			Long id = 1L;
+			CategoryRequestDTO dto = new CategoryRequestDTO("Computer");
+			when(repository.findById(id)).thenReturn(Optional.empty());
+			
+			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.update(id, dto));
+			
+			assertEquals("Não foi encontrada uma categoria com o ID: " + id, e.getMessage());
+			verify(repository, times(1)).findById(id);
+		}
+		
+	}
 }
