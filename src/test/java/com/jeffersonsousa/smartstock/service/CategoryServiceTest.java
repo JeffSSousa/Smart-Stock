@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -92,6 +93,29 @@ public class CategoryServiceTest {
 			assertEquals("Não foi encontrada uma categoria com o ID: " + id, e.getMessage());
 			
 			verify(repository, times(1)).findById(id);
+		}
+		
+	}
+	
+	@Nested
+	class getAllCategories{
+		
+		@Test
+		@DisplayName("Deve listar todas as categorias com sucesso")
+		void shouldListAllCategories() {
+			
+			Category category = new Category(1L, "Computer", null);
+			List<Category> categories = List.of(category);
+			
+			when(repository.findAll()).thenReturn(categories);
+			
+			List<CategoryResponseDTO> output = service.getAllCategories();
+			
+			verify(repository, times(1)).findAll();
+			assertNotNull(output);
+			assertEquals(categories.size(), output.size());
+			assertEquals(categories.get(0).getCategoryId(), output.get(0).id());
+			assertEquals(categories.get(0).getName(), output.get(0).name());
 		}
 		
 	}
