@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,11 +22,13 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.jeffersonsousa.smartstock.dto.CategoryRequestDTO;
 import com.jeffersonsousa.smartstock.dto.CategoryResponseDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
 import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
+import com.jeffersonsousa.smartstock.exception.DatabaseException;
 import com.jeffersonsousa.smartstock.repository.CategoryRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -118,5 +122,54 @@ public class CategoryServiceTest {
 			assertEquals(categories.get(0).getName(), output.get(0).name());
 		}
 		
+	}
+	
+	@Nested
+	class delete{
+		
+		@Test
+		@DisplayName("Deve deletar uma categoria com sucesso")
+		void shouldDeleteACategory() {
+			
+			Long id = 1L;
+			Category category = new Category(id, "Computer", null);
+			
+			when(repository.findById(id)).thenReturn(Optional.of(category));
+			doNothing().when(repository).delete(category);
+			
+			service.delete(id);
+			
+			verify(repository, times(1)).findById(id);
+			verify(repository, times(1)).delete(category);
+		}
+		
+		
+		@Test
+		@DisplayName("Deve lançar uma exceção quando a categoria não for encontrada")
+		void shouldThrowExceptionWhenCategoryNotFound() {
+			
+			Long id = 1L;
+			when(repository.findById(id)).thenReturn(Optional.empty());
+			
+			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.delete(id));
+			
+			assertEquals("Não foi encontrada uma categoria com o ID: " + id, e.getMessage());
+			verify(repository, times(1)).findById(id);
+		}
+		
+		@Test
+		@DisplayName("Deve lançar uma exceção quando a categoria estiver vinculada com outras entidades")
+		void shouldThrowExceptionWhenCategoryIsLinkedToOtherEntities() {
+			
+			Long id = 1L;
+			Category category = new Category(id, "Computer", null);
+			
+			when(repository.findById(id)).thenReturn(Optional.of(category));
+			doThrow(DataIntegrityViolationException.class).when(repository).delete(category);
+			
+			DatabaseException e = assertThrows(DatabaseException.class, () -> service.delete(id));
+			
+			assertEquals("Não é possível excluir a categoria. Ele está vinculado a outras entidades no sistema.", e.getMessage());
+		}
 	}
 }
