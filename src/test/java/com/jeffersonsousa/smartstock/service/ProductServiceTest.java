@@ -3,6 +3,7 @@ package com.jeffersonsousa.smartstock.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -129,11 +130,11 @@ public class ProductServiceTest {
 	class getAllProduct{
 		
 		@Test
-		@DisplayName("Deve listar Todos os produtos com sucesso")
+		@DisplayName("Deve listar Todos os produtos com sucesso.")
 		void shouldListAllProducts() {
 			
 			Category category = new Category(1L, "Computer", null);
-			Product product = new Product(1L, "Apple Macbook", 0, 10, 6956.0, category, null, null);
+			Product product = new Product(1L, "Apple Macbook M1", 0, 10, 6956.0, category, null, null);
 			List<Product> products = List.of(product);
 			when(productRepository.findAll()).thenReturn(products);
 			
@@ -147,7 +148,37 @@ public class ProductServiceTest {
 	
 	@Nested
 	class getLowStockProducts{
-		//listar
+		
+		@Test
+		@DisplayName("Deve listar os produtos que estão com o estoque baixo.")
+		void shouldListLowStockProducts() {
+			
+			Category category = new Category(1L, "Computer", null);
+			Product macbook = new Product(1L, "Apple Macbook M1", 9, 10, 6956.0, category, null, null);
+			Product iphone = new Product(1L, "Apple iPhone 15", 10, 10, 10996.0, category, null, null);
+			List<Product> products = List.of(macbook, iphone);
+			List<Product> lowStockProducts = products.stream().filter(p -> p.getCurrentQuantity() < p.getMinimumQuantity()).toList();
+			when(productRepository.findAll()).thenReturn(products);
+			
+			List<ProductResponseDTO> output = service.getLowStockProducts();
+			
+			assertNotNull(output);
+			assertEquals(lowStockProducts.size(), output.size());
+			assertEquals(lowStockProducts.get(0).getName(), output.get(0).name());
+		}
+		
+		@Test
+		@DisplayName("Deve retornar lista vazia quando não há produtos com estoque baixo.")
+		void shouldReturnEmptyListWhenNoLowStockProducts() {
+		    Category category = new Category(1L, "Computer", null);
+		    Product iphone = new Product(1L, "iPhone 15", 20, 10, 10996.0, category, null, null);
+		    when(productRepository.findAll()).thenReturn(List.of(iphone));
+
+		    List<ProductResponseDTO> output = service.getLowStockProducts();
+
+		    assertNotNull(output);
+		    assertTrue(output.isEmpty());
+		}
 	}
 	
 	@Nested
