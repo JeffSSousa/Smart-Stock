@@ -1,7 +1,6 @@
 package com.jeffersonsousa.smartstock.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,8 +27,10 @@ public class ProductService {
 
 	
 	public void create(ProductRequestDTO dto) {
-		Optional<Category> category = categoryRepository.findById(dto.categoryId());
-		Product product = new Product(dto, category.get());
+		Category category = categoryRepository.findById(dto.categoryId())
+							.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + dto.categoryId()));
+		
+		Product product = new Product(dto, category);
 		productRepository.save(product);
 	}
 
