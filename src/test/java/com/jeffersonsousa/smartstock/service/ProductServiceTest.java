@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -126,7 +127,22 @@ public class ProductServiceTest {
 	
 	@Nested
 	class getAllProduct{
-		//listar todos
+		
+		@Test
+		@DisplayName("Deve listar Todos os produtos com sucesso")
+		void shouldListAllProducts() {
+			
+			Category category = new Category(1L, "Computer", null);
+			Product product = new Product(1L, "Apple Macbook", 0, 10, 6956.0, category, null, null);
+			List<Product> products = List.of(product);
+			when(productRepository.findAll()).thenReturn(products);
+			
+			List<ProductResponseDTO> output = service.getAllProducts();
+			
+			assertNotNull(output);
+			assertEquals(products.size(), output.size());
+			assertEquals(products.get(0).getName(), output.get(0).name());
+		}
 	}
 	
 	@Nested
