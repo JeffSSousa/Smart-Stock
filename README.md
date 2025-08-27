@@ -29,9 +29,15 @@ Este projeto é uma API REST para gerenciamento de estoque de empresas, desenvol
 
 ## Exemplo de Requisições no Swagger UI
 
+![Dashboard do projeto](docs/images/SwaggerUI.png)
+
 ## Vizualização de Dados no Postman
 
+![Dashboard do projeto](docs/images/Postman.png)
+
 ## Vizualização do Banco de Dados
+
+![Dashboard do projeto](docs/images/H2%20Console.png)
 
 ## Como Rodar o Projeto
 
