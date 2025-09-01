@@ -1,6 +1,7 @@
 package com.jeffersonsousa.smartstock.service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,9 @@ public class StockMovementService {
 
 		List<Location> list = locationRepository.findByProduct(product);
 		int totalQuantity = dto.quantity();
+		
+		List<Location> updateLocations = new ArrayList<>();
+		List<StockMovement> newStockMovements = new ArrayList<>();
 
 		for (Location location : list) {
 			if (totalQuantity == 0) break;
@@ -89,11 +93,15 @@ public class StockMovementService {
 			
 
 			resetLocation(location);
-			locationRepository.save(location);
-			movementRepository.save(newOutput);
-			updateCurrentQuantity(product);
+			updateLocations.add(location);
+			newStockMovements.add(newOutput);
 			totalQuantity -= toWithdraw;
 		}
+
+		updateCurrentQuantity(product);
+		locationRepository.saveAll(updateLocations);
+		movementRepository.saveAll(newStockMovements);
+		
 	}
 
 	private void updateCurrentQuantity(Product product) {
