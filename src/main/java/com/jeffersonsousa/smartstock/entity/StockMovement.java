@@ -25,7 +25,7 @@ import lombok.Setter;
 public class StockMovement {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long stockMovementId;
 	private String type;
 	private Integer quantity;
