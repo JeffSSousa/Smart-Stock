@@ -43,7 +43,7 @@ Esta documentação lista os **requisitos funcionais e não funcionais** do proj
 ## 📂 Links Relacionados
 
 
-- [01 - Visão Geral](01-visao-geral.md)  
+- [01 - Visão Geral](01-visão-geral.md)  
 - **02 - Requisitos** - Você está aqui
 - [03 - Arquitetura](03-arquitetura.md)
 - [04 - Modelo de Dados](04-modelo-dados.md)
