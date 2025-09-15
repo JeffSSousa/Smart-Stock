@@ -13,6 +13,26 @@ Este projeto é uma API REST para gerenciamento de estoque de empresas, desenvol
 - O objetivo do sistema é fornecer um controle eficiente e centralizado do estoque, ajudando empresas a reduzir erros operacionais e melhorar a gestão de seus produtos.
 
 
+---
+
+## 📚 Documentação
+
+A documentação detalhada do projeto está organizada na pasta [`/docs`](./docs) caso tenha interesse nos detalhes do projeto.  
+
+- [01 - Visão Geral](./docs/01-visao-geral.md)  
+- [02 - Requisitos](./docs/02-requisitos.md)  
+- [03 - Arquitetura](./docs/03-arquitetura.md)  
+- [04 - Modelo de Dados](./docs/04-modelo-dados.md)  
+- [05 - Decisões de Arquitetura](./docs/05-decisoes-arquitetura.md)  
+- [06 - Casos de Uso](./docs/06-casos-uso.md)  
+- [07 - Diagramas de Sequência](./docs/07-modelo-sequencia.md)  
+- [08 - Roadmap](./docs/08-roadmap.md)  
+- [09 - Estratégia de Testes](./docs/09-testes.md)  
+
+> 👉 Recomendo começar pela **[Visão Geral](./docs/01-visao-geral.md)** para entender o contexto do projeto.
+
+---
+
 ## 🚀 Tecnologias Utilizadas
 
 - **Java** -  linguagem principal do projeto.
@@ -27,17 +47,25 @@ Este projeto é uma API REST para gerenciamento de estoque de empresas, desenvol
 - **Maven** - gerenciamento de dependências e build do projeto.
 - **Postman** - teste e documentação dos endpoints da API.
 
+---
+
 ## Exemplo de Requisições no Swagger UI
 
 ![Dashboard do projeto](docs/images/SwaggerUI.png)
+
+---
 
 ## Vizualização de Dados no Postman
 
 ![Dashboard do projeto](docs/images/Postman.png)
 
+---
+
 ## Vizualização do Banco de Dados
 
 ![Dashboard do projeto](docs/images/H2%20Console.png)
+
+---
 
 ## Como Rodar o Projeto
 
@@ -71,6 +99,8 @@ Este projeto é uma API REST para gerenciamento de estoque de empresas, desenvol
     Conecte no banco de dados e visualize os dados inseridos pelas requisições realizadas.
 
 <br><br>
+
+---
 
 ## 🙋 Sobre o Autor
 
