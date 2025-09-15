@@ -25,9 +25,7 @@ A documentação detalhada do projeto está organizada na pasta [`/docs`](./docs
 - [04 - Modelo de Dados](./docs/04-modelo-dados.md)  
 - [05 - Decisões de Arquitetura](./docs/05-decisoes-arquitetura.md)  
 - [06 - Casos de Uso](./docs/06-casos-uso.md)  
-- [07 - Diagramas de Sequência](./docs/07-modelo-sequencia.md)  
-- [08 - Roadmap](./docs/08-roadmap.md)  
-- [09 - Estratégia de Testes](./docs/09-testes.md)  
+- [07 - Roadmap](./docs/08-roadmap.md) 
 
 > 👉 Recomendo começar pela **[Visão Geral](./docs/01-visao-geral.md)** para entender o contexto do projeto.
 
