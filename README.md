@@ -19,7 +19,7 @@ Este projeto é uma API REST para gerenciamento de estoque de empresas, desenvol
 
 A documentação detalhada do projeto está organizada na pasta [`/docs`](./docs) caso tenha interesse nos detalhes do projeto.  
 
-> 👉 Recomendo começar pela **[Visão Geral](./docs/01-visao-geral.md)** para entender o contexto do projeto.
+> 👉 Recomendo começar pela **[Visão Geral](./docs/01-visão-geral.md)** para entender o contexto do projeto.
 
 ---
 
