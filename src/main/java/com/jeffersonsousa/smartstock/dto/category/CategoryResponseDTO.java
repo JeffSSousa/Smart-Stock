@@ -13,8 +13,4 @@ public record CategoryResponseDTO(
 		@Schema(description = "Descrição da categoria", example = "Eletronicos")
 		String name) {
 
-	public CategoryResponseDTO(Category category) {
-		this(category.getCategoryId(), category.getName());
-	}
-	
 }

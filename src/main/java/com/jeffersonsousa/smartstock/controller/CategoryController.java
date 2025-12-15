@@ -2,6 +2,8 @@ package com.jeffersonsousa.smartstock.controller;
 
 import java.util.List;
 
+import com.jeffersonsousa.smartstock.entity.Category;
+import com.jeffersonsousa.smartstock.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,9 @@ public class CategoryController {
 	
 	@Autowired
 	private CategoryService service;
+
+    @Autowired
+    private CategoryMapper mapper;
 	
 	@Operation(description = "Cria uma categoria de produtos.")
 	@ApiResponses(value = {
@@ -35,7 +40,8 @@ public class CategoryController {
 	})
 	@PostMapping
 	public ResponseEntity<Void> insertCategory(@RequestBody CategoryRequestDTO dto){
-		service.createCategory(dto);
+        Category category = mapper.toEntity(dto);
+        service.createCategory(category);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
@@ -46,8 +52,9 @@ public class CategoryController {
 	})
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable Long id){
-		CategoryResponseDTO category = service.findById(id);
-		return ResponseEntity.ok().body(category);
+		Category category = service.findById(id);
+        CategoryResponseDTO dto = mapper.toDto(category);
+		return ResponseEntity.ok().body(dto);
 	}
 	
 	@Operation(description = "Busca todas as categorias.")
@@ -56,7 +63,10 @@ public class CategoryController {
 	})
 	@GetMapping
 	public ResponseEntity<List<CategoryResponseDTO>> getCategories(){
-		List<CategoryResponseDTO> list = service.getAllCategories();
+		List<CategoryResponseDTO> list = service.getAllCategories()
+                                                .stream()
+                                                .map(mapper::toDto)
+                                                .toList();
 		return ResponseEntity.ok().body(list);
 	}
 	
@@ -68,7 +78,10 @@ public class CategoryController {
 	})
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryRequestDTO dto){
-		return ResponseEntity.ok().body(service.update(id, dto));
+		Category category = mapper.toEntity(dto);
+        category = service.update(id, category);
+        CategoryResponseDTO response = mapper.toDto(category);
+        return ResponseEntity.ok().body(response);
 	}
 	
 	@Operation(description = "Deleta uma categoria pelo Id.")

@@ -5,9 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
-import com.jeffersonsousa.smartstock.dto.category.CategoryRequestDTO;
-import com.jeffersonsousa.smartstock.dto.category.CategoryResponseDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
 import com.jeffersonsousa.smartstock.exception.exceptions.ControllerNotFoundException;
 import com.jeffersonsousa.smartstock.exception.exceptions.DatabaseException;
@@ -19,31 +16,27 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
-	public void createCategory(CategoryRequestDTO dto) {
-		Category category = new Category(dto);
-		categoryRepository.save(category);
+	public Category createCategory(Category category) {
+		return categoryRepository.save(category);
 	}
 
-	public CategoryResponseDTO findById(Long id) {
-		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + id));
-		
-		return new CategoryResponseDTO(category);
+	public Category findById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + id));
 	}
 
-	public List<CategoryResponseDTO> getAllCategories() {
-		List<CategoryResponseDTO> list = categoryRepository.findAll().stream().map(CategoryResponseDTO::new).toList();
-		return list;
+	public List<Category> getAllCategories() {
+		return categoryRepository.findAll();
 	}
 
-	public CategoryResponseDTO update(Long id, CategoryRequestDTO dto) {
+	public Category update(Long id, Category category) {
 		Category entity = categoryRepository.findById(id)
 				.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + id));
 		
-		entity.setName(dto.name());
+		entity.setName(category.getName());
 		categoryRepository.save(entity);
 		
-		return new CategoryResponseDTO(entity);
+		return entity;
 	}
 
 	public void delete(Long id) {

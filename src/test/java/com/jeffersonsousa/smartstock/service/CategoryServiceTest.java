@@ -51,17 +51,16 @@ public class CategoryServiceTest {
 		void shouldCreateACategory() {
 			
 			String name = "Computer";
-			CategoryRequestDTO dto = new CategoryRequestDTO(name);
-			Category category = new Category(dto);
+			Category category = new Category(null, name, null);
 			
 			when(repository.save(any(Category.class))).thenReturn(category);
 			
-			service.createCategory(dto);
+			service.createCategory(category);
 			
 			verify(repository, times(1)).save(categoryCaptor.capture());
 			Category captured = categoryCaptor.getValue();
 			
-			assertEquals(name, captured.getName());
+			assertEquals(category.getName(), captured.getName());
 			
 		}	
 	}
@@ -79,11 +78,11 @@ public class CategoryServiceTest {
 			
 			when(repository.findById(id)).thenReturn(Optional.of(category));
 			
-			CategoryResponseDTO output = service.findById(id);
+			Category output = service.findById(id);
 			
 			assertNotNull(output);
-			assertEquals(id, output.id());
-			assertEquals(name, output.name());
+			assertEquals(id, output.getCategoryId());
+			assertEquals(name, output.getName());
 		}
 		
 		@Test
@@ -113,13 +112,13 @@ public class CategoryServiceTest {
 			
 			when(repository.findAll()).thenReturn(categories);
 			
-			List<CategoryResponseDTO> output = service.getAllCategories();
+			List<Category> output = service.getAllCategories();
 			
 			verify(repository, times(1)).findAll();
 			assertNotNull(output);
 			assertEquals(categories.size(), output.size());
-			assertEquals(categories.get(0).getCategoryId(), output.get(0).id());
-			assertEquals(categories.get(0).getName(), output.get(0).name());
+			assertEquals(categories.get(0).getCategoryId(), output.get(0).getCategoryId());
+			assertEquals(categories.get(0).getName(), output.get(0).getName());
 		}
 		
 	}
@@ -183,13 +182,13 @@ public class CategoryServiceTest {
 			
 			Long id = 1L;
 			Category category = new Category(id, "Computers", null);
-			CategoryRequestDTO dto = new CategoryRequestDTO("Computer");
+			Category categoryUpdated = new Category(id, "Computer", null);
 			when(repository.findById(id)).thenReturn(Optional.of(category));
-			
-			CategoryResponseDTO output = service.update(id, dto);
+
+			Category output = service.update(id, categoryUpdated);
 			
 			verify(repository, times(1)).save(category);
-			assertEquals(dto.name(), output.name());
+			assertEquals(categoryUpdated.getName(), output.getName());
 		}
 		
 		@Test
@@ -197,10 +196,10 @@ public class CategoryServiceTest {
 		void shouldThrowExceptionWhenCategoryNotFound() {
 			
 			Long id = 1L;
-			CategoryRequestDTO dto = new CategoryRequestDTO("Computer");
+			Category category = new Category(id, "Computer", null);
 			when(repository.findById(id)).thenReturn(Optional.empty());
 			
-			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.update(id, dto));
+			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.update(id, category));
 			
 			assertEquals("Não foi encontrada uma categoria com o ID: " + id, e.getMessage());
 			verify(repository, times(1)).findById(id);
