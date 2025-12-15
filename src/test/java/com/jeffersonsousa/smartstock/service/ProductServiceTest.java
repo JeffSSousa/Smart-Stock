@@ -58,21 +58,27 @@ public class ProductServiceTest {
 		void shouldACreateProduct() {
 			
 			Category category = new Category(1L, "Computer", null);
-			ProductRequestDTO dto = new ProductRequestDTO("Apple Mackbook M1", 10, 6956.0, category.getCategoryId());
-			Product product = new Product(dto, category);
+            Product product = new Product(null,
+                                            "Apple Mackbook M1",
+                                            null,
+                                            10,
+                                            6956.0,
+                                            category,
+                                            null,
+                                            null);
 			when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 			when(productRepository.save(any(Product.class))).thenReturn(product);
 			
-			service.create(dto);
+			service.create(product, category.getCategoryId());
 			
 			verify(categoryRepository, times(1)).findById(1L);
 			verify(productRepository, times(1)).save(captor.capture());
 			
 			Product output = captor.getValue();
 			
-			assertEquals(dto.name(), output.getName());
-			assertEquals(dto.minimumQuantity(), output.getMinimumQuantity());
-			assertEquals(dto.price(), output.getPrice());
+			assertEquals(product.getName(), output.getName());
+			assertEquals(product.getMinimumQuantity(), output.getMinimumQuantity());
+			assertEquals(product.getPrice(), output.getPrice());
 			assertEquals(category.getName(), output.getCategory().getName());
 		}
 		
@@ -81,10 +87,18 @@ public class ProductServiceTest {
 		void shouldThrowExceptionWhenCategoryNotFound() {
 
 			Long id = 1L;
-			ProductRequestDTO dto = new ProductRequestDTO("Apple Macbook M1", 10, 6956.0, id);
+            Category category = new Category(1L, "Computer", null);
+            Product product = new Product(null,
+                    "Apple Mackbook M1",
+                    null,
+                    10,
+                    6956.0,
+                    category,
+                    null,
+                    null);
 			when(categoryRepository.findById(id)).thenReturn(Optional.empty());
 			
-			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.create(dto));
+			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.create(product,category.getCategoryId()));
 			
 			assertEquals("Não foi encontrada uma categoria com o ID: " + id, e.getMessage());
 			verify(categoryRepository, times(1)).findById(id);

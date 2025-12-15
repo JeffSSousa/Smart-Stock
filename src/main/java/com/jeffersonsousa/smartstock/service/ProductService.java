@@ -26,11 +26,11 @@ public class ProductService {
 	private CategoryRepository categoryRepository;
 
 	
-	public void create(ProductRequestDTO dto) {
-		Category category = categoryRepository.findById(dto.categoryId())
-							.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + dto.categoryId()));
-		
-		Product product = new Product(dto, category);
+	public void create(Product product, Long categoryId) {
+		Category category = categoryRepository.findById(categoryId)
+							.orElseThrow(() -> new ControllerNotFoundException("Não foi encontrada uma categoria com o ID: " + categoryId));
+
+        product.setCategory(category);
 		productRepository.save(product);
 	}
 

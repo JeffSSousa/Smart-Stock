@@ -2,6 +2,8 @@ package com.jeffersonsousa.smartstock.controller;
 
 import java.util.List;
 
+import com.jeffersonsousa.smartstock.entity.Product;
+import com.jeffersonsousa.smartstock.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,9 @@ public class ProductController {
 	@Autowired
 	private ProductService service;
 
+    @Autowired
+    private ProductMapper mapper;
+
 	@Operation(description = "Cria produto no banco de dados.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Cria um produto."),
@@ -37,7 +42,8 @@ public class ProductController {
 	})
 	@PostMapping
 	public ResponseEntity<Void> insert(@RequestBody ProductRequestDTO dto){
-		service.create(dto);
+        Product product = mapper.toEntity(dto);
+        service.create(product, dto.categoryId());
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
