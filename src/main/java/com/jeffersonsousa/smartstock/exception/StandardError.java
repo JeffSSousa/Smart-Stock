@@ -1,4 +1,4 @@
-package com.jeffersonsousa.smartstock.infra;
+package com.jeffersonsousa.smartstock.exception;
 
 import java.io.Serializable;
 import java.time.Instant;

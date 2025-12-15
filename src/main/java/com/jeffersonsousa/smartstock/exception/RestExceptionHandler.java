@@ -1,4 +1,4 @@
-package com.jeffersonsousa.smartstock.infra;
+package com.jeffersonsousa.smartstock.exception;
 
 import java.time.Instant;
 
@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
-import com.jeffersonsousa.smartstock.exception.DatabaseException;
-import com.jeffersonsousa.smartstock.exception.InsufficientStockException;
-import com.jeffersonsousa.smartstock.exception.StockException;
+import com.jeffersonsousa.smartstock.exception.exceptions.ControllerNotFoundException;
+import com.jeffersonsousa.smartstock.exception.exceptions.DatabaseException;
+import com.jeffersonsousa.smartstock.exception.exceptions.InsufficientStockException;
+import com.jeffersonsousa.smartstock.exception.exceptions.StockException;
 
 import jakarta.servlet.http.HttpServletRequest;
 

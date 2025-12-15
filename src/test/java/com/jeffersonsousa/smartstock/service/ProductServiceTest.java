@@ -30,8 +30,8 @@ import com.jeffersonsousa.smartstock.dto.ProductResponseDTO;
 import com.jeffersonsousa.smartstock.dto.ProductUpdateDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
 import com.jeffersonsousa.smartstock.entity.Product;
-import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
-import com.jeffersonsousa.smartstock.exception.DatabaseException;
+import com.jeffersonsousa.smartstock.exception.exceptions.ControllerNotFoundException;
+import com.jeffersonsousa.smartstock.exception.exceptions.DatabaseException;
 import com.jeffersonsousa.smartstock.repository.CategoryRepository;
 import com.jeffersonsousa.smartstock.repository.ProductRepository;
 

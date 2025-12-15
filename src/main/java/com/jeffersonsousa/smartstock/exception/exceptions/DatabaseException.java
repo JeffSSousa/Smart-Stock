@@ -1,4 +1,4 @@
-package com.jeffersonsousa.smartstock.exception;
+package com.jeffersonsousa.smartstock.exception.exceptions;
 
 public class DatabaseException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

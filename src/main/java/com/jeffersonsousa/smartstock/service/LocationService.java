@@ -10,7 +10,7 @@ import com.jeffersonsousa.smartstock.dto.CreateStockDTO;
 import com.jeffersonsousa.smartstock.dto.LocationResponseDTO;
 import com.jeffersonsousa.smartstock.dto.StockCreationMessageDTO;
 import com.jeffersonsousa.smartstock.entity.Location;
-import com.jeffersonsousa.smartstock.exception.StockException;
+import com.jeffersonsousa.smartstock.exception.exceptions.StockException;
 import com.jeffersonsousa.smartstock.repository.LocationRepository;
 
 @Service

@@ -27,8 +27,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import com.jeffersonsousa.smartstock.dto.CategoryRequestDTO;
 import com.jeffersonsousa.smartstock.dto.CategoryResponseDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
-import com.jeffersonsousa.smartstock.exception.ControllerNotFoundException;
-import com.jeffersonsousa.smartstock.exception.DatabaseException;
+import com.jeffersonsousa.smartstock.exception.exceptions.ControllerNotFoundException;
+import com.jeffersonsousa.smartstock.exception.exceptions.DatabaseException;
 import com.jeffersonsousa.smartstock.repository.CategoryRepository;
 
 @ExtendWith(MockitoExtension.class)
