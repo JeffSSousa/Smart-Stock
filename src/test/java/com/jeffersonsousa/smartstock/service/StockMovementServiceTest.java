@@ -24,7 +24,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.jeffersonsousa.smartstock.dto.MovementRequestDTO;
+import com.jeffersonsousa.smartstock.dto.stockmovement.MovementRequestDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
 import com.jeffersonsousa.smartstock.entity.Location;
 import com.jeffersonsousa.smartstock.entity.Product;

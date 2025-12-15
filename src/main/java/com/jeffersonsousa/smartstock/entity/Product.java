@@ -2,7 +2,7 @@ package com.jeffersonsousa.smartstock.entity;
 
 import java.util.List;
 
-import com.jeffersonsousa.smartstock.dto.ProductRequestDTO;
+import com.jeffersonsousa.smartstock.dto.product.ProductRequestDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

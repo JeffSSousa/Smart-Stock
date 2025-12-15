@@ -1,4 +1,4 @@
-package com.jeffersonsousa.smartstock.dto;
+package com.jeffersonsousa.smartstock.dto.location;
 
 import com.jeffersonsousa.smartstock.entity.Location;
 

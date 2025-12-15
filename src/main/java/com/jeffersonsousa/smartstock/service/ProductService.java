@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.jeffersonsousa.smartstock.dto.ProductRequestDTO;
-import com.jeffersonsousa.smartstock.dto.ProductResponseDTO;
-import com.jeffersonsousa.smartstock.dto.ProductUpdateDTO;
+import com.jeffersonsousa.smartstock.dto.product.ProductRequestDTO;
+import com.jeffersonsousa.smartstock.dto.product.ProductResponseDTO;
+import com.jeffersonsousa.smartstock.dto.product.ProductUpdateDTO;
 import com.jeffersonsousa.smartstock.entity.Category;
 import com.jeffersonsousa.smartstock.entity.Product;
 import com.jeffersonsousa.smartstock.exception.exceptions.ControllerNotFoundException;

@@ -1,4 +1,4 @@
-package com.jeffersonsousa.smartstock.dto;
+package com.jeffersonsousa.smartstock.dto.category;
 
 import com.jeffersonsousa.smartstock.entity.Category;
 

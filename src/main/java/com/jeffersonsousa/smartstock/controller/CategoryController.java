@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jeffersonsousa.smartstock.dto.CategoryRequestDTO;
-import com.jeffersonsousa.smartstock.dto.CategoryResponseDTO;
+import com.jeffersonsousa.smartstock.dto.category.CategoryRequestDTO;
+import com.jeffersonsousa.smartstock.dto.category.CategoryResponseDTO;
 import com.jeffersonsousa.smartstock.service.CategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;

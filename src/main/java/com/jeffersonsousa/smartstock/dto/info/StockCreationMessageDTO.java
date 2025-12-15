@@ -1,4 +1,4 @@
-package com.jeffersonsousa.smartstock.dto;
+package com.jeffersonsousa.smartstock.dto.info;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

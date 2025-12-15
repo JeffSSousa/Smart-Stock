@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jeffersonsousa.smartstock.dto.MovementRequestDTO;
+import com.jeffersonsousa.smartstock.dto.stockmovement.MovementRequestDTO;
 import com.jeffersonsousa.smartstock.entity.Location;
 import com.jeffersonsousa.smartstock.entity.Product;
 import com.jeffersonsousa.smartstock.entity.StockMovement;

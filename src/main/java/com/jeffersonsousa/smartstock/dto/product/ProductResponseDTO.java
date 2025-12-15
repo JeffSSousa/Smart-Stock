@@ -1,4 +1,4 @@
-package com.jeffersonsousa.smartstock.dto;
+package com.jeffersonsousa.smartstock.dto.product;
 
 import com.jeffersonsousa.smartstock.entity.Product;
 

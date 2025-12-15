@@ -20,9 +20,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.jeffersonsousa.smartstock.dto.CreateStockDTO;
-import com.jeffersonsousa.smartstock.dto.LocationResponseDTO;
-import com.jeffersonsousa.smartstock.dto.StockCreationMessageDTO;
+import com.jeffersonsousa.smartstock.dto.stockmovement.CreateStockDTO;
+import com.jeffersonsousa.smartstock.dto.location.LocationResponseDTO;
+import com.jeffersonsousa.smartstock.dto.info.StockCreationMessageDTO;
 import com.jeffersonsousa.smartstock.entity.Location;
 import com.jeffersonsousa.smartstock.exception.exceptions.StockException;
 import com.jeffersonsousa.smartstock.repository.LocationRepository;
