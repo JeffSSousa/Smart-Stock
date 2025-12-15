@@ -19,9 +19,8 @@ public class LocationService {
 	@Autowired
 	LocationRepository locationRepository;
 
-	public List<LocationResponseDTO> getAllLocations() {
-		List<LocationResponseDTO> list = locationRepository.findAll().stream().map(LocationResponseDTO::new).toList();
-		return list;
+	public List<Location> getAllLocations() {
+        return locationRepository.findAll();
 	}
 
 	public StockCreationMessageDTO createStock(CreateStockDTO dto) {

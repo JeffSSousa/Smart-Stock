@@ -52,13 +52,14 @@ public class LocationServiceTest {
 			
 			when(repository.findAll()).thenReturn(stock);
 			
-			List<LocationResponseDTO> output = service.getAllLocations();
+			List<Location> output = service.getAllLocations();
 			
 			verify(repository, times(1)).findAll();
 			
 			assertNotNull(output);
 			assertEquals(stock.size(), output.size());
-			assertEquals(stock.get(0).getLocationId(), output.get(0).locationId());
+			assertEquals(stock.get(0).getLocationId(), output.get(0).getLocationId());
+            assertEquals(stock.get(1).getLocationId(), output.get(1).getLocationId());
 		}
 	}
 	

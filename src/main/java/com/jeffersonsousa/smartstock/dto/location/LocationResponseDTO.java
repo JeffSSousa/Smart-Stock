@@ -1,7 +1,5 @@
 package com.jeffersonsousa.smartstock.dto.location;
 
-import com.jeffersonsousa.smartstock.entity.Location;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record LocationResponseDTO(
@@ -13,19 +11,11 @@ public record LocationResponseDTO(
 		Boolean hasProduct, 
 		
 		@Schema(description = "Descrição do produto que está armazenado nesse endereço", example = "TV 50 Polegadas 4k SmartTV")
-		String product, 
+		Long productId,
 		
 		@Schema(description = "Quantidade de produtos nesse endereço", example = "10")						  
 		Integer quantity
 		
 		){
-
-	
-	public LocationResponseDTO(Location location) {
-		this(location.getLocationId(), 
-			 location.getHasProduct(), 
-			 location.getProduct() != null ? location.getProduct().getName() : null,
-			 location.getQuantity());
-	}
 	
 }

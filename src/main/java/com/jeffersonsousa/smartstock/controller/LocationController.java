@@ -2,6 +2,7 @@ package com.jeffersonsousa.smartstock.controller;
 
 import java.util.List;
 
+import com.jeffersonsousa.smartstock.mapper.LocationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,9 @@ public class LocationController {
 
 	@Autowired
 	private LocationService service;
+
+    @Autowired
+    private LocationMapper mapper;
 	
 	@Operation(description = "Busca todos os endereços no estoque.")
 	@ApiResponses(value = {
@@ -33,7 +37,10 @@ public class LocationController {
 	})
 	@GetMapping
 	public ResponseEntity<List<LocationResponseDTO>> getAllLocations(){
-		List<LocationResponseDTO> list = service.getAllLocations();
+		List<LocationResponseDTO> list = service.getAllLocations()
+                                                .stream()
+                                                .map(mapper::toDTO)
+                                                .toList();
 		return ResponseEntity.ok().body(list);
 	}
 
