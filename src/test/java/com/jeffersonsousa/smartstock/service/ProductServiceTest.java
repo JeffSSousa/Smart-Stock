@@ -1,9 +1,6 @@
 package com.jeffersonsousa.smartstock.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -14,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 
+import com.jeffersonsousa.smartstock.builders.ProductTestBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -56,16 +54,13 @@ public class ProductServiceTest {
 		@Test
 		@DisplayName("Deve criar um produto com sucesso no banco de dados.")
 		void shouldACreateProduct() {
-			
+
 			Category category = new Category(1L, "Computer", null);
-            Product product = new Product(null,
-                                            "Apple Mackbook M1",
-                                            null,
-                                            10,
-                                            6956.0,
-                                            category,
-                                            null,
-                                            null);
+            Product product = ProductTestBuilder.aProduct()
+                                                .withCurrentQuantity(null)
+                                                .withCategory(category)
+                                                .build();
+
 			when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 			when(productRepository.save(any(Product.class))).thenReturn(product);
 			
@@ -113,22 +108,20 @@ public class ProductServiceTest {
 		void shouldFindAProductById() {
 			
 			Long id = 1L;
-			Category category = new Category(id, "Computer", null);
-			ProductRequestDTO dto = new ProductRequestDTO("Apple Mackbook M1", 10, 6956.0, category.getCategoryId());
-			Product product = new Product(dto, category);
-			
+            Product product = ProductTestBuilder.aProduct().withProductId(id).build();
+
 			when(productRepository.findById(id)).thenReturn(Optional.of(product));
 			
-			ProductResponseDTO output = service.getProductById(id);
+			Product output = service.getProductById(id);
 			
 			verify(productRepository, times(1)).findById(id);
 			
 			assertNotNull(output);
-			assertEquals(dto.name(), output.name());
-			assertEquals(0, output.currentQuantity());
-			assertEquals(dto.minimumQuantity(), output.minimumQuantity());
-			assertEquals(dto.price(), output.price());
-			assertEquals(category.getName(), output.Category());
+			assertEquals(product.getName(), output.getName());
+			assertEquals(product.getMinimumQuantity(), output.getMinimumQuantity());
+            assertEquals(product.getCurrentQuantity(),output.getCurrentQuantity());
+			assertEquals(product.getPrice(), output.getPrice());
+			assertEquals(product.getCategory().getName(), output.getCategory().getName());
 		}
 		
 		@Test
@@ -151,17 +144,17 @@ public class ProductServiceTest {
 		@Test
 		@DisplayName("Deve listar Todos os produtos com sucesso.")
 		void shouldListAllProducts() {
-			
-			Category category = new Category(1L, "Computer", null);
-			Product product = new Product(1L, "Apple Macbook M1", 0, 10, 6956.0, category, null, null);
+
+			Product product = ProductTestBuilder.aProduct().build();
 			List<Product> products = List.of(product);
 			when(productRepository.findAll()).thenReturn(products);
 			
-			List<ProductResponseDTO> output = service.getAllProducts();
-			
+			List<Product> output = service.getAllProducts();
+
+            verify(productRepository,times(1)).findAll();
 			assertNotNull(output);
 			assertEquals(products.size(), output.size());
-			assertEquals(products.get(0).getName(), output.get(0).name());
+			assertEquals(products.getFirst().getName(), output.getFirst().getName());
 		}
 	}
 	
@@ -171,29 +164,38 @@ public class ProductServiceTest {
 		@Test
 		@DisplayName("Deve listar os produtos que estão com o estoque baixo.")
 		void shouldListLowStockProducts() {
-			
-			Category category = new Category(1L, "Computer", null);
-			Product macbook = new Product(1L, "Apple Macbook M1", 9, 10, 6956.0, category, null, null);
-			Product iphone = new Product(1L, "Apple iPhone 15", 10, 10, 10996.0, category, null, null);
-			List<Product> products = List.of(macbook, iphone);
+
+			Product macbook = ProductTestBuilder.aProduct()
+                    .withName("Apple Macbook M1")
+                    .withCurrentQuantity(9)
+                    .withMinimumQuantity(10)
+                    .build();
+
+            Product iphone = ProductTestBuilder.aProduct()
+                    .withCurrentQuantity(10)
+                    .withMinimumQuantity(10)
+                    .build();
+
+            List<Product> products = List.of(macbook, iphone);
 			List<Product> lowStockProducts = products.stream().filter(p -> p.getCurrentQuantity() < p.getMinimumQuantity()).toList();
 			when(productRepository.findAll()).thenReturn(products);
 			
-			List<ProductResponseDTO> output = service.getLowStockProducts();
+			List<Product> output = service.getLowStockProducts();
 			
 			assertNotNull(output);
 			assertEquals(lowStockProducts.size(), output.size());
-			assertEquals(lowStockProducts.get(0).getName(), output.get(0).name());
+			assertEquals(lowStockProducts.getFirst().getName(), output.getFirst().getName());
 		}
 		
 		@Test
 		@DisplayName("Deve retornar lista vazia quando não há produtos com estoque baixo.")
 		void shouldReturnEmptyListWhenNoLowStockProducts() {
-		    Category category = new Category(1L, "Computer", null);
-		    Product iphone = new Product(1L, "iPhone 15", 20, 10, 10996.0, category, null, null);
+
+		    Product iphone = ProductTestBuilder.aProduct().build();
+
 		    when(productRepository.findAll()).thenReturn(List.of(iphone));
 
-		    List<ProductResponseDTO> output = service.getLowStockProducts();
+		    List<Product> output = service.getLowStockProducts();
 
 		    assertNotNull(output);
 		    assertTrue(output.isEmpty());
@@ -202,29 +204,30 @@ public class ProductServiceTest {
 	
 	@Nested
 	class update{
-		//update
 		
 		@Test
 		@DisplayName("Deve Atualizar dados do produto com sucesso.")
 		void shouldUpdateAProduct() {
 			Long id = 1L;
-			Category category = new Category(id, "Computers", null);
-			Product iphone = new Product(1L, "Apple iPhone 15", 10, 10, 10996.0, category, null, null);
-			ProductUpdateDTO updateDTO = new ProductUpdateDTO("Apple iPhone 15 Pro Max", 15, 12289.0);
+			Product iphone = ProductTestBuilder.aProduct().build();
+            Product request = ProductTestBuilder.aProduct()
+                                                .withName("Apple iPhone 15 Pro Max 256GB")
+                                                .withMinimumQuantity(10)
+                                                .withPrice(12999.9)
+                                                .build();
+
 			when(productRepository.findById(id)).thenReturn(Optional.of(iphone));
-			
-			
-			service.update(id, updateDTO);
-			
+
+			service.update(id, request);
 			
 			verify(productRepository, times(1)).findById(id);
 			verify(productRepository, times(1)).save(captor.capture());
 			
 			Product output = captor.getValue();
 			
-			assertEquals(updateDTO.name(), output.getName());
-			assertEquals(updateDTO.minimumQuantity(), output.getMinimumQuantity());
-			assertEquals(updateDTO.price(), output.getPrice());
+			assertEquals(request.getName(), output.getName());
+			assertEquals(request.getMinimumQuantity(), output.getMinimumQuantity());
+			assertEquals(request.getPrice(), output.getPrice());
 		}
 		
 		
@@ -233,10 +236,10 @@ public class ProductServiceTest {
 		void shouldThrowExceptionWhenProductNotFound() {
 			
 			Long id = 1L;
-			ProductUpdateDTO updateDTO = new ProductUpdateDTO("Apple iPhone 15 Pro Max", 15, 12289.0);
-			when(productRepository.findById(id)).thenReturn(Optional.empty());
+            Product request = ProductTestBuilder.aProduct().build();
+            when(productRepository.findById(id)).thenReturn(Optional.empty());
 			
-			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.update(id, updateDTO));
+			ControllerNotFoundException e = assertThrows(ControllerNotFoundException.class, () -> service.update(id, request));
 			
 			verify(productRepository, times(1)).findById(id);
 			assertEquals("Produto com o ID" + id + " não foi encontrado!!", e.getMessage());
