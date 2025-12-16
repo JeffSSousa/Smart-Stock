@@ -50,6 +50,7 @@ O objetivo é fornecer clareza sobre **a construção do sistema e facilitar man
 - **MySQL** - banco de dados relacional utilizado.
 - **Maven** - gerenciamento de dependências e build do projeto.
 - **Postman** - teste e documentação dos endpoints da API.
+- **MapStruct** – conversão automática entre DTOs e entidades, reduzindo código boilerplate
 
 ---
 
