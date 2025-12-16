@@ -22,7 +22,7 @@ public record ProductResponseDTO(
 		Double price,
 								 
 		@Schema(description = "Categoria que o produto se encaixa", example = "Computadores")
-		String Category
+		String category
 		) {
 
 	public ProductResponseDTO(Product product) {

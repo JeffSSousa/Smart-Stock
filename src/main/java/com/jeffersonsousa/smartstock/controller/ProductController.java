@@ -54,7 +54,8 @@ public class ProductController {
 	})
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id){
-		ProductResponseDTO dto = service.getProductById(id);
+		Product product = service.getProductById(id);
+        ProductResponseDTO dto = mapper.toDTO(product);
 		return ResponseEntity.ok().body(dto);
 	}
 	
@@ -64,7 +65,10 @@ public class ProductController {
 	})
 	@GetMapping
 	public ResponseEntity<List<ProductResponseDTO>> getAllProducts(){
-		List<ProductResponseDTO> list = service.getAllProducts();
+		List<ProductResponseDTO> list = service.getAllProducts()
+                                                .stream()
+                                                .map(mapper::toDTO)
+                                                .toList();
 		return ResponseEntity.ok().body(list);
 	}
 	
@@ -74,7 +78,10 @@ public class ProductController {
 	})
 	@GetMapping(value = "/lowStockProducts")
 	public ResponseEntity<List<ProductResponseDTO>> getLowStockProducts(){
-		List<ProductResponseDTO> list = service.getLowStockProducts();
+		List<ProductResponseDTO> list = service.getLowStockProducts()
+                                                .stream()
+                                                .map(mapper::toDTO)
+                                                .toList();
 		return ResponseEntity.ok().body(list);
 	}
 	
@@ -84,8 +91,11 @@ public class ProductController {
 			@ApiResponse(responseCode = "404", description = "Não encontrou o produto.")
 	})
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @RequestBody ProductUpdateDTO dto){
-		return ResponseEntity.ok().body(service.update(id,dto));
+	public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @RequestBody ProductRequestDTO request){
+        Product product = mapper.toEntity(request);
+        product = service.update(id,product);
+        ProductResponseDTO response = mapper.toDTO(product);
+        return ResponseEntity.ok().body(response);
 	}
 	
 	@Operation(description = "Deleta o produto pelo Id.")
