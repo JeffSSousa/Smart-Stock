@@ -1,7 +1,5 @@
 # SmartStock - Aplicação para Controle de Estoque 
 
-```Projeto em fase de testes```
-
 Este projeto é uma API REST para gerenciamento de estoque de empresas, desenvolvida com Java e Spring Boot.
 
 ### O sistema permite:
